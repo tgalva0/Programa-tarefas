@@ -16,12 +16,12 @@ public class BancoDadosAPI {
             "data_de_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
             ")";
     private static final String MUDAR_STATUS = "UPDATE tarefas SET concluida = ?, data_de_alteracao = CURRENT_TIMESTAMP WHERE task = ?";
-
+    private static final String SELECIONAR_TAREFA_SQL = "SELECT task, concluida, data_de_alteracao FROM tarefas WHERE task = ?";
 
     public BancoDadosAPI() {
         this.db = MyJDBC.pegarConexao();
 
-        if(db.isPresent()) {
+        if (db.isPresent()) {
             configurarBanco();
             System.out.println("Conectado com sucesso!");
         } else {
@@ -39,7 +39,7 @@ public class BancoDadosAPI {
         }
     }
 
-    public Optional<List<Tarefa>> selecionarTodasTarefas()  {
+    public Optional<List<Tarefa>> selecionarTodasTarefas() {
         String sql = "SELECT task, concluida, data_de_alteracao FROM tarefas ORDER BY data_de_alteracao DESC";
         List<Tarefa> tarefas = new ArrayList<>();
         try {
@@ -49,16 +49,12 @@ public class BancoDadosAPI {
             while (resultado.next()) {
                 String task = resultado.getString("task");
                 boolean concluida = resultado.getBoolean("concluida");
-                String atualizacao = resultado.getString("data_de_alteracao");
+                Timestamp atualizacao = resultado.getTimestamp("data_de_alteracao");
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> b463efaecf801fa5622cf4ab639bbaef5c7d47ab
                 // Adicionar livro à lista
                 tarefas.add(new Tarefa(task, concluida, atualizacao));
-            } resultado.close();
+            }
+            resultado.close();
 
             resultado.close();
 
@@ -69,25 +65,34 @@ public class BancoDadosAPI {
         return Optional.of(tarefas);
     }
 
+    public Optional<Tarefa> selecionarTarefa(String task) throws SQLException {
+        try {
+            PreparedStatement comando = db.get().prepareStatement(SELECIONAR_TAREFA_SQL);
+            comando.setString(1, task);
+            ResultSet resultado = comando.executeQuery();
+            if (resultado.next()) {
+                String rsTask = resultado.getString("task");
+                boolean rsConcluida = resultado.getBoolean("concluida");
+                Timestamp rsAtualizacao = resultado.getTimestamp("data_de_alteracao");
 
-    public boolean inserirTarefa(String texto, Boolean concluida) throws SQLException {
-<<<<<<< HEAD
-        Optional<List<Tarefa>> tarefas = selecionarTodasTarefas();
-        if(tarefas.isPresent()) {
-            for(Tarefa tarefa : tarefas.get()) {
-                if(tarefa.task.equals(texto)) {
-                    return false;
-                }
+                var tarefa = new Tarefa(rsTask, rsConcluida, rsAtualizacao);
+                return Optional.of(tarefa);
             }
-=======
-        Optional<List<Tarefa>>tarefas= selecionarTodasTarefas();
-        if (tarefas.isPresent()){
+        } catch (SQLException e) {
+            System.out.println("Erro ao selecionar tarefa: " + e.getMessage());
+        }
+
+        return Optional.empty();
+    }
+
+    public Optional<Tarefa> inserirTarefa(String texto, Boolean concluida) throws SQLException {
+        Optional<List<Tarefa>> tarefas = selecionarTodasTarefas();
+        if (tarefas.isPresent()) {
             for (Tarefa tarefa : tarefas.get())
                 if (tarefa.task.equals(texto)) {
                     System.out.println("Essa tarefa já existe");
-                    return false;
+                    return Optional.empty();
                 }
->>>>>>> b463efaecf801fa5622cf4ab639bbaef5c7d47ab
         }
         PreparedStatement comando = db.get().prepareStatement(INSERIR_TAREFA_SQL);
         comando.setString(1, texto);
@@ -97,36 +102,37 @@ public class BancoDadosAPI {
             comando.close();
         } catch (SQLException e) {
             System.out.println("Erro ao inserir tarefas: " + e.getMessage());
-            return false;
+            return Optional.empty();
         }
         System.out.println("Tarefa Criada com sucesso!");
-        return true;
+
+        return selecionarTarefa(texto);
     }
 
 
-<<<<<<< HEAD
-=======
-    public boolean MudarStatus(Tarefa tarefa) throws SQLException {
-        boolean status = true;
+    public boolean MudarStatus(Optional<Tarefa> tarefa) throws SQLException {
+        if(tarefa.isPresent()) {
+            boolean status = true;
 
-        if (tarefa.concluida){
-            status= false;
+            if (tarefa.get().concluida) {
+                status = false;
+            }
+
+            PreparedStatement comando = db.get().prepareStatement(MUDAR_STATUS);
+            comando.setBoolean(1, status);
+            comando.setString(2, tarefa.get().task);
+
+            try {
+                comando.executeUpdate();
+                comando.close();
+            } catch (SQLException e) {
+                System.out.println("Erro ao mudar status: " + e.getMessage());
+                return false;
+            }
+            System.out.println("Status concluído = " + status);
+            return true;
         }
-        PreparedStatement comando = db.get().prepareStatement(MUDAR_STATUS);
-        comando.setBoolean(1, status);
-        comando.setString(2, tarefa.task);
 
-        try {
-            comando.executeUpdate();
-            comando.close();
-        } catch (SQLException e) {
-            System.out.println("Erro ao mudar status: " + e.getMessage());
-            return false;
-        }
-        System.out.println("Status concluído!");
-        return true;
-
-
+        return false;
     }
->>>>>>> b463efaecf801fa5622cf4ab639bbaef5c7d47ab
 }

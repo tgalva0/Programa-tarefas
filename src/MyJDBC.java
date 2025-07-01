@@ -43,7 +43,7 @@ public class MyJDBC {
                     System.out.println("Tabela 'tarefas' criada ou já existe.");
                 }
                 // Insere dados de exemplo
-                criarExemplosDeTarefas(conexao);
+//                criarExemplosDeTarefas(conexao);
             } catch (SQLException e) {
                 System.out.println(String.format("Falha ao criar tabela: %s", e.getMessage()));
             }
