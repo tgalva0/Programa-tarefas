@@ -49,11 +49,11 @@ public class BancoDadosAPI {
                 boolean concluida = resultado.getBoolean("concluida");
                 String atualizacao = resultado.getString("data_de_alteracao");
 
-                resultado.close();
+
 
                 // Adicionar livro à lista
                 tarefas.add(new Tarefa(task, concluida, atualizacao));
-            }
+            } resultado.close();
 
         } catch (SQLException e) {
             System.out.println("Erro ao selecionar todas as Tarefas: " + e.getMessage());
