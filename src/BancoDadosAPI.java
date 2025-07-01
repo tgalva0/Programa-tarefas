@@ -48,11 +48,11 @@ public class BancoDadosAPI {
                 boolean concluida = resultado.getBoolean("concluida");
                 String atualizacao = resultado.getString("data_de_alteracao");
 
-                resultado.close();
-
                 // Adicionar livro à lista
                 tarefas.add(new Tarefa(task, concluida, atualizacao));
             }
+
+            resultado.close();
 
         } catch (SQLException e) {
             System.out.println("Erro ao selecionar todas as Tarefas: " + e.getMessage());
@@ -63,6 +63,14 @@ public class BancoDadosAPI {
 
 
     public boolean inserirTarefa(String texto, Boolean concluida) throws SQLException {
+        Optional<List<Tarefa>> tarefas = selecionarTodasTarefas();
+        if(tarefas.isPresent()) {
+            for(Tarefa tarefa : tarefas.get()) {
+                if(tarefa.task.equals(texto)) {
+                    return false;
+                }
+            }
+        }
         PreparedStatement comando = db.get().prepareStatement(INSERIR_TAREFA_SQL);
         comando.setString(1, texto);
         comando.setBoolean(2, concluida);
@@ -76,4 +84,6 @@ public class BancoDadosAPI {
         System.out.println("Tarefa Criada com sucesso!");
         return true;
     }
+
+
 }
