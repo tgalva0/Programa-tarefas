@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class BancoDadosAPI {
+    //teste
     private Optional<Connection> db = Optional.empty();
     private static final String INSERIR_TAREFA_SQL = "INSERT INTO tarefas (task, concluida, data_de_alteracao) VALUES (?, ?, CURRENT_TIMESTAMP)";
     // SQL para criar a tabela tarefas com data_de_alteracao
