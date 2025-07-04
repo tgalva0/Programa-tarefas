@@ -6,8 +6,9 @@ public class main {
         BancoDadosAPI db = new BancoDadosAPI();
 
         MyJDBC.configurarBanco();
-        var tarefa = db.selecionarTarefa("tarefa1");
+        db.inserirTarefa("tarefa1", false);
+        System.out.println(db.selecionarTarefa("tarefa1"));
 //        System.out.println(db.selecionarTodasTarefas());
-        System.out.println(db.MudarStatus(tarefa));
+        System.out.println(db.MudarStatus(db.selecionarTarefa("tarefa1")));
     }
 }

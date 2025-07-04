@@ -1,6 +1,5 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +41,7 @@ public class BancoDadosAPI {
     public Optional<List<Tarefa>> selecionarTodasTarefas() {
         String sql = "SELECT task, concluida, data_de_alteracao FROM tarefas ORDER BY data_de_alteracao DESC";
         List<Tarefa> tarefas = new ArrayList<>();
+
         try {
             PreparedStatement requisicao = db.get().prepareStatement(sql);
             ResultSet resultado = requisicao.executeQuery();
@@ -56,6 +56,29 @@ public class BancoDadosAPI {
             }
             resultado.close();
 
+        } catch (SQLException e) {
+            System.out.println("Erro ao selecionar todas as Tarefas: " + e.getMessage());
+            return Optional.empty();
+        }
+        return Optional.of(tarefas);
+    }
+
+    public Optional<List<Tarefa>> selecionarTodasTarefasPorStatus(Boolean concluido) {
+        String sql = "SELECT task, concluida, data_de_alteracao FROM tarefas WHERE concluida = ?";
+        List<Tarefa> tarefas = new ArrayList<>();
+
+        try {
+            PreparedStatement requisicao = db.get().prepareStatement(sql);
+            ResultSet resultado = requisicao.executeQuery();
+
+            while (resultado.next()) {
+                String task = resultado.getString("task");
+                boolean concluida = resultado.getBoolean("concluida");
+                Timestamp atualizacao = resultado.getTimestamp("data_de_alteracao");
+
+                // Adicionar livro à lista
+                tarefas.add(new Tarefa(task, concluida, atualizacao));
+            }
             resultado.close();
 
         } catch (SQLException e) {
@@ -110,11 +133,11 @@ public class BancoDadosAPI {
     }
 
 
-    public boolean MudarStatus(Optional<Tarefa> tarefa) throws SQLException {
+    public Optional<Tarefa> MudarStatus(Optional<Tarefa> tarefa) throws SQLException {
         if(tarefa.isPresent()) {
             boolean status = true;
 
-            if (tarefa.get().concluida) {
+            if (tarefa.get().concluido) {
                 status = false;
             }
 
@@ -127,12 +150,12 @@ public class BancoDadosAPI {
                 comando.close();
             } catch (SQLException e) {
                 System.out.println("Erro ao mudar status: " + e.getMessage());
-                return false;
+                return Optional.empty();
             }
+            Optional<Tarefa> novaTarefa = selecionarTarefa(tarefa.get().task);
             System.out.println("Status concluído = " + status);
-            return true;
+            return Optional.of(novaTarefa.get());
         }
-
-        return false;
+        return Optional.empty();
     }
 }

@@ -1,14 +1,13 @@
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class Tarefa {
     public String task;
-    public boolean concluida;
+    public boolean concluido;
     public Timestamp data_de_alteracao;
 
     public Tarefa(String task, boolean concluida, Timestamp data_de_alteracao) {
         this.task = task;
-        this.concluida = concluida;
+        this.concluido = concluida;
         this.data_de_alteracao = data_de_alteracao;
     }
 
@@ -16,7 +15,7 @@ public class Tarefa {
     public String toString() {
         return "\nTarefa{\n" +
                 "texto: " + task +
-                "\nstatus: " + concluida +
+                "\nstatus: " + concluido +
                 "\ndata_alteraçao: " + data_de_alteracao +
                 "\n" + "}";
     }
