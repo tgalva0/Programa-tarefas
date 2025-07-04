@@ -24,6 +24,6 @@ bin/
 
 ### VS Code ###
 .vscode/
-tarefas_db.db
+
 ### Mac OS ###
 .DS_Store

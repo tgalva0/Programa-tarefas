@@ -1,3 +1,7 @@
+package main.database;
+
+import main.model.Tarefa;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +10,7 @@ import java.util.Optional;
 public class BancoDadosAPI {
     //teste
     private Optional<Connection> db = Optional.empty();
-    private static final String INSERIR_TAREFA_SQL = "INSERT INTO tarefas (task, concluida, data_de_alteracao) VALUES (?, ?, CURRENT_TIMESTAMP)";
+    private static final String INSERIR_TAREFA_SQL = "INSERT INTO tarefas (task, concluida, data_de_alteracao) VALUES (?, ?, datetime('now', 'localtime'))";
     // SQL para criar a tabela tarefas com data_de_alteracao
     private static final String CRIAR_TABELA_TAREFAS_SQL = "CREATE TABLE IF NOT EXISTS tarefas (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -14,7 +18,7 @@ public class BancoDadosAPI {
             "concluida BOOLEAN NOT NULL," +
             "data_de_alteracao TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
             ")";
-    private static final String MUDAR_STATUS = "UPDATE tarefas SET concluida = ?, data_de_alteracao = CURRENT_TIMESTAMP WHERE task = ?";
+    private static final String MUDAR_STATUS = "UPDATE tarefas SET concluida = ?, data_de_alteracao = datetime('now', 'localtime') WHERE task = ?";
     private static final String SELECIONAR_TAREFA_SQL = "SELECT task, concluida, data_de_alteracao FROM tarefas WHERE task = ?";
 
     public BancoDadosAPI() {
@@ -69,6 +73,7 @@ public class BancoDadosAPI {
 
         try {
             PreparedStatement requisicao = db.get().prepareStatement(sql);
+            requisicao.setBoolean(1, concluido);
             ResultSet resultado = requisicao.executeQuery();
 
             while (resultado.next()) {
@@ -137,7 +142,7 @@ public class BancoDadosAPI {
         if(tarefa.isPresent()) {
             boolean status = true;
 
-            if (tarefa.get().concluido) {
+            if (tarefa.get().concluida) {
                 status = false;
             }
 

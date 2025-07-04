@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="main.GUI.controller.TarefasController"
+      style="-fx-padding: 10; -fx-spacing: 10;">
+
+    <HBox spacing="10.0">
+        <TextField fx:id="campoTexto" promptText="Digite uma nova tarefa" HBox.hgrow="ALWAYS"/>
+        <Button text="Adicionar" onAction="#adicionarTarefa"/>
+        <Label text="Filtrar:"/>
+        <ComboBox fx:id="filtroComboBox" prefWidth="150"/>
+    </HBox>
+
+    <TableView fx:id="tabela">
+        <columns>
+            <TableColumn fx:id="colDescricao" text="Descrição" prefWidth="280"/>
+            <TableColumn fx:id="colConcluida" text="Concluída" prefWidth="100"/>
+            <TableColumn fx:id="colData" text="Última Alteração" prefWidth="180"/>
+        </columns>
+    </TableView>
+</VBox>
