@@ -58,6 +58,7 @@ public class BancoDadosAPI {
                 // Adicionar livro à lista
                 tarefas.add(new Tarefa(task, concluida, atualizacao));
             }
+            requisicao.close();
             resultado.close();
 
         } catch (SQLException e) {
@@ -75,6 +76,7 @@ public class BancoDadosAPI {
             PreparedStatement requisicao = db.get().prepareStatement(sql);
             requisicao.setBoolean(1, concluido);
             ResultSet resultado = requisicao.executeQuery();
+            requisicao.close();
 
             while (resultado.next()) {
                 String task = resultado.getString("task");
@@ -93,18 +95,17 @@ public class BancoDadosAPI {
         return Optional.of(tarefas);
     }
 
-    public Optional<Tarefa> selecionarTarefa(String task) throws SQLException {
-        try {
-            PreparedStatement comando = db.get().prepareStatement(SELECIONAR_TAREFA_SQL);
+    public Optional<Tarefa> selecionarTarefa(String task) {
+        try (PreparedStatement comando = db.get().prepareStatement(SELECIONAR_TAREFA_SQL)) {
             comando.setString(1, task);
-            ResultSet resultado = comando.executeQuery();
-            if (resultado.next()) {
-                String rsTask = resultado.getString("task");
-                boolean rsConcluida = resultado.getBoolean("concluida");
-                Timestamp rsAtualizacao = resultado.getTimestamp("data_de_alteracao");
+            try (ResultSet resultado = comando.executeQuery()) {
+                if (resultado.next()) {
+                    String rsTask = resultado.getString("task");
+                    boolean rsConcluida = resultado.getBoolean("concluida");
+                    Timestamp rsAtualizacao = resultado.getTimestamp("data_de_alteracao");
 
-                var tarefa = new Tarefa(rsTask, rsConcluida, rsAtualizacao);
-                return Optional.of(tarefa);
+                    return Optional.of(new Tarefa(rsTask, rsConcluida, rsAtualizacao));
+                }
             }
         } catch (SQLException e) {
             System.out.println("Erro ao selecionar tarefa: " + e.getMessage());
@@ -112,6 +113,7 @@ public class BancoDadosAPI {
 
         return Optional.empty();
     }
+
 
     public Optional<Tarefa> inserirTarefa(String texto, Boolean concluida) throws SQLException {
         Optional<List<Tarefa>> tarefas = selecionarTodasTarefas();
@@ -122,10 +124,11 @@ public class BancoDadosAPI {
                     return Optional.empty();
                 }
         }
-        PreparedStatement comando = db.get().prepareStatement(INSERIR_TAREFA_SQL);
-        comando.setString(1, texto);
-        comando.setBoolean(2, concluida);
+
         try {
+            PreparedStatement comando = db.get().prepareStatement(INSERIR_TAREFA_SQL);
+            comando.setString(1, texto);
+            comando.setBoolean(2, concluida);
             comando.executeUpdate();
             comando.close();
         } catch (SQLException e) {
@@ -146,11 +149,10 @@ public class BancoDadosAPI {
                 status = false;
             }
 
-            PreparedStatement comando = db.get().prepareStatement(MUDAR_STATUS);
-            comando.setBoolean(1, status);
-            comando.setString(2, tarefa.get().task);
-
             try {
+                PreparedStatement comando = db.get().prepareStatement(MUDAR_STATUS);
+                comando.setBoolean(1, status);
+                comando.setString(2, tarefa.get().task);
                 comando.executeUpdate();
                 comando.close();
             } catch (SQLException e) {
