@@ -7,16 +7,17 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="main.GUI.controller.TarefasController"
-      style="-fx-padding: 10; -fx-spacing: 10;">
+      styleClass="vbox"
+     >
 
-    <HBox spacing="10.0">
-        <TextField fx:id="campoTexto" promptText="Digite uma nova tarefa" HBox.hgrow="ALWAYS"/>
-        <Button text="Adicionar" onAction="#adicionarTarefa"/>
-        <Label text="Filtrar:"/>
-        <ComboBox fx:id="filtroComboBox" prefWidth="150"/>
+    <HBox styleClass="hbox">
+        <TextField styleClass="textfield" fx:id="campoTexto" promptText="Digite uma nova tarefa" HBox.hgrow="ALWAYS"/>
+        <Button styleClass="adicionar-button" text="Adicionar" onAction="#adicionarTarefa"/>
+        <Label text="Filtrar:" styleClass="filtrar"/>
+        <ComboBox fx:id="filtroComboBox" prefWidth="150" styleClass="filter-combo-box"/>
     </HBox>
 
-    <TableView fx:id="tabela">
+    <TableView fx:id="tabela" styleClass="tabela">
         <columns>
             <TableColumn fx:id="colDescricao" text="Descrição" prefWidth="280"/>
             <TableColumn fx:id="colConcluida" text="Concluída" prefWidth="100"/>
