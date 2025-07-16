@@ -1,4 +1,4 @@
-# 📋 Programa Tarefas - JavaFX com JDK 24
+# 📋 Programa Tarefas - JavaFX com JDK 22
 
 Este projeto é uma aplicação Java de tarefas utilizando **JavaFX SDK 17.0.1** aliado ao CSS na inteface gráfica, **SQLite JDBC** e **JUnit para testes**, configurado utilizando Gradle.
 
