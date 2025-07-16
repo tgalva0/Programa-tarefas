@@ -1,0 +1,113 @@
+.vbox {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-background-color: #1e1f22;
+}
+
+.hbox {
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+.textfield {
+    -fx-background-color: #3a3d40;
+    -fx-text-fill: white;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+}
+
+.adicionar-button {
+    -fx-background-color: #3a3d40;
+    -fx-text-fill: white;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-font-weight: bold;
+}
+
+.filtrar {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.filter-combo-box {
+    -fx-background-color: #3a3d40;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-text-fill: white;
+    -fx-text-color: white;
+}
+
+.filter-combo-box .label{
+    -fx-text-fill: white;
+    -fx-text-color: white;
+}
+
+.filter-combo-box .text-field{
+    -fx-prompt-text-fill: white;
+    -fx-text-color: white;
+}
+
+.filter-combo-box .list-cell{
+    -fx-prompt-text-fill: white;
+    -fx-text-color: white;
+
+}
+
+.filter-combo-box .list-view .list-cell:hover{
+    -fx-background-color: #044787;
+}
+
+.filter-combo-box .list-view .list-cell{
+    -fx-text-fill: white;
+    -fx-background-color: #3a3d40;
+    -fx-text-color: white;
+}
+
+.tabela {
+    -fx-background-color: transparent;
+    -fx-border-color: #444;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 5;
+}
+
+.tabela .column-header {
+    -fx-background-color: #1f1f1f; /* fundo bem escuro */
+}
+
+.tabela .column-header .label {
+    -fx-text-fill: #f0f0f0; /* texto claro para contraste */
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+
+/* Células */
+.tabela .table-cell {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 13px;
+    -fx-padding: 6 10;
+    -fx-background-color: transparent;
+}
+
+/* Linhas alternadas */
+.tabela .table-row-cell:odd {
+    -fx-background-color: #3a3d40;
+}
+
+.tabela .table-row-cell:even {
+    -fx-background-color: #1f1f1f;
+}
+
+.tabela .table-row-cell:selected {
+    -fx-background-color: #044787;
+    -fx-text-fill: white;
+}
+
+/* Mensagem de vazio */
+.tabela .placeholder .label {
+    -fx-text-fill: #bdc3c7;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+}
+
