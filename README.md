@@ -13,7 +13,7 @@ Os requisitos são mínimos:
 * **Memória RAM:** Mínimo de 2 GB
   **Como instalar:**
 
-1.  Vá para a seção de [**Releases**](https://github.com/SEU-USUARIO/SEU-REPOSITORIO/releases) deste repositório.
+1.  Vá para a seção de [**Releases**](https://github.com/tgalva0/Programa-tarefas/releases) deste repositório.
 2.  Baixe o arquivo de instalação mais recente (ex: `NoteTakingApp-1.0.0.exe`).
 3.  Execute o instalador e siga as instruções na tela.
 
